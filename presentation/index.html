@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Java 8 nightclazz</title>
+
+    <meta name="author" content="Xavier Detant & Khaled Souf">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/theme/zenika.css" id="theme">
+
+</head>
+
+<body>
+
+<div class="reveal">
+
+<!-- Any section element inside of this container is displayed as a slide -->
+<div class="slides">
+<section id="titre">
+    <h1>Java 8 Avancée</h1>
+
+    <h2>NightClazz</h2>
+</section>
+<section>
+    <h1>Qui sommes nous ?</h1>
+
+    <p><img src="img/khaled.jpg" alt="Khaled Souf" height="300"/></p>
+
+    <h2>Khaled Souf</h2>
+
+    <p><img src="img/xavier.jpg" alt="Xavier Detant" height="300"/></p>
+
+    <h2>Xavier Detant</h2>
+</section>
+<section>
+    <h1>Vous êtes perdus ?</h1>
+
+    <p><img src="img/perdu.jpg" alt="Perdu?" height="700"/></p>
+
+</section>
+<section>
+    <h1>Posez des questions !</h1>
+
+    <p><img src="img/question.jpeg" alt="Questions" height="700"/></p>
+
+</section>
+<section class="section">
+    <h1>Rappels<br/>Night Clazz <br/> Découverte</h1>
+</section>
+<section class="sommaire">
+    <h1>Night Clazz Découverte</h1>
+    <ol>
+	<li>Méthodes Par Défault</li>
+        <li>Lambdas</li>
+        <li>API Stream</li>        
+    </ol>
+</section>
+<section>
+    <h1>Méthodes Par Défaut</h1>
+<p>nouveau modificateur <em class="keyword">default</em></p>
+            <pre><code class="java" data-trim>public interface MyNewInterface {
+    default String myDefaultMethod(String name) {
+        return &quot;Hello &quot; + name;
+    }
+}</code></pre>
+</section>
+<section>
+    <h1>Lambdas Expressions</h1>
+     <p>Les lambdas sont utilisées pour définir des implémentations aux
+        interfaces fonctionnelles</p>
+    <pre><code class="java"
+                                                        data-trim>angryTeacher.correctExam((e)-&gt;e.setScore(0));</code></pre>
+    <pre><code class="java"
+                                                        data-trim>happyTeacher.correctExam((e)-&gt;e.setScore(20));</code></pre>
+    <pre><code class="java"
+                                                        data-trim>teacher.correctExam((e)-&gt;e.computeScore());</code></pre>
+    <p>les parenthèses ne sont pas obligatoires si on a un
+        seul paramètre</p>
+    <pre><code class="java"
+                                                        data-trim>teacher.correctExam(e-&gt;e.computeScore());</code></pre>
+    <p>on peut encore simplifier grâce aux method reference</p>
+    <pre><code class="java"
+                                                        data-trim>teacher.correctExam(Exam::computeScore);</code></pre>
+</section>
+<section>
+    <h1>API Stream</h1>
+    <pre><code class="java"
+                           data-trim>public interface Stream&lt;T&gt; extends BaseStream&lt;T, Stream&lt;T&gt;&gt; {
+
+    Stream&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate);
+
+    &lt;R&gt; Stream&lt;R&gt; map(Function&lt;? super T, ? extends R&gt; mapper);
+
+    Stream&lt;T&gt; distinct();
+
+    Stream&lt;T&gt; sorted();
+
+    Stream&lt;T&gt; peek(Consumer&lt;? super T&gt; action);
+
+    Stream&lt;T&gt; limit(long maxSize);
+}</code></pre>
+</section>
+<section class="section">
+    <h1>Java 8 Avancé</h1>
+</section>
+<section class="sommaire">
+    <h1>Java 8 Avancé</h1>
+    <ol>
+        <li>Lambdas & API Stream Avancée</li>
+        <li>Inférence de Type</li>
+	<li>API Date-Time</li>
+        <li>Annotations et réflexion</li>
+    </ol>
+</section>
+<section class="section">
+    <h1>API Stream Avancée</h1>
+</section>
+<section>
+    <h1>API Stream Avancée</h1>
+                <pre data-fragment-index="0"><code class="java" data-trim>public interface Stream&lt;T&gt; {
+    Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator);
+
+    T reduce(T identity, BinaryOperator&lt;T&gt; accumulator);
+
+    &lt;U&gt; U reduce(U identity,
+                 BiFunction&lt;U, ? super T, U&gt; accumulator,
+                 BinaryOperator&lt;U&gt; combiner);
+
+    &lt;R&gt; Stream&lt;R&gt; flatMap(Function&lt;? super T, ? extends Stream&lt;? extends R&gt;&gt; mapper);
+
+    &lt;R&gt; R collect(Supplier&lt;R&gt; supplier,
+                  BiConsumer&lt;R, ? super T&gt; accumulator,
+                  BiConsumer&lt;R, R&gt; combiner);
+
+    &lt;R, A&gt; R collect(Collector&lt;? super T, A, R&gt; collector);
+}</code></pre>
+</section>
+
+<section>
+    <h1>Hands on !</h1>
+    <p><img src="img/computer-geek.jpg" alt="Hands on" style="margin-top: 100px"/></p>
+</section>
+    <section>
+        <p><img src="img/super.jpeg" alt="Hands on" style="margin-top: 100px"/></p>
+    </section>
+<section class="section">
+    <h1>Inférence de Type</h1>
+</section>
+<section>
+    <h1>Contructeurs Génériques</h1>
+                <pre data-fragment-index="0"><code class="java" data-trim>public class OldInference&lt;X> {
+  &lt;T> OldInferenceSample(T t) {
+    // ...
+  }
+   public static void main(String[] args) {
+      // Java Prior to Java 7 Inference of constructor by parameter
+      OldInference&lt;Integer> oldInference = new OldInference&lt;Integer>("");
+      // java 7 InferenceType Instatiation class (diamond operator)
+      OldInference&lt;Integer> oldInference = new OldInference&lt;>("");
+  }
+}</code></pre>
+</section>
+
+<section>
+    <h1>Méthodes et Paramètres Génériques</h1>
+                <pre data-fragment-index="0"><code class="java" data-trim>public class TypeInference {
+	public static void processStringList(List&lt;String> stringList) {
+    		// process stringList
+	}
+	public static &lt;U> void processAnyList(List&lt;U> boxes) {
+    		// process any List
+    	}
+	public static void main(String[] args) {
+	// java 7 InferenceType of generic method
+	TypeInference.processAnyList(Collections.&lt;String>emptyList());
+	// java 8 InferenceType of method parameters
+	TypeInference.processStringList(Collections.emptyList());
+  }
+}</code></pre>
+</section>
+
+<section class="section">
+    <h1>API<br/>Date-Time</h1>
+</section>
+<section>
+    <h1>L'API Date-Time</h1>
+    <pre class="fragment"><code class="java" data-trim>java.time.chrono</code></pre>
+    <pre class="fragment"><code class="java" data-trim>java.time.format</code></pre>
+    <pre class="fragment"><code class="java" data-trim>java.time.temporal</code></pre>
+    <pre class="fragment"><code class="java" data-trim>java.time.zone</code></pre>
+</section>
+
+<section>
+    <h1>Les Classes de l'API Date-Time</h1>
+
+    <p class="fragment">Les classes dite <em class="keyword">time</em> sont : </p>
+        <pre class="fragment"><code class="java"
+                                    data-trim>Instant current=Instant.now();</code></pre>
+        <pre class="fragment"><code class="java" data-trim>LocalTime time=LocalTime.now();
+System.out.println(time.getHour()+&quot; &quot;+time.getMinute()+&quot; &quot;+time.getSecond());</code></pre>
+
+
+    <p class="fragment">Les classes de <em class="keyword">dates</em> sont : </p>
+    <pre class="fragment"><code class="java" data-trim>LocalDate date=LocalDate.of(2000,Month.NOVEMBER,20);</code></pre>
+    <pre class="fragment"><code class="java" data-trim> YearMonth date=YearMonth.now(); </code></pre>
+    <pre class="fragment"><code class="java" data-trim> MonthDay date=MonthDay.of(Month.FEBRUARY,29);</code></pre>
+    <p class="fragment">et les deux : </p>
+    <pre class="fragment"><code class="java" data-trim>LocalDateTime.of(1994,Month.APRIL,15,11,30);</code></pre>
+</section>
+
+
+<section>
+    <h1>Les Classes de l'API Date-Time</h1>
+
+        <pre class="fragment"><code class="java" data-trim>LocalDate birthday, today;
+// ...
+Period p=Period.between(birthday,today);</code></pre>
+
+        <pre class="fragment"><code class="java" data-trim>Instant t1, t2;
+// ...
+Duration duration=Duration.between(t1,t2);</code></pre>
+	<pre class="fragment"><code class="java" data-trim>Instant previous, current, gap;
+// ...
+gap=ChronoUnit.MILLIS.between(previous,current);</code></pre>
+
+</section>
+<section>
+    <h1>Le Formattage de l'API Date-Time</h1>
+
+	<pre class="fragment"><code class="java" data-trim>String input=...;
+DateTimeFormatter formatter=DateTimeFormatter.ofPattern("MMM d yyyy");
+String output=formatter.parse(input);</code></pre>
+<pre class="fragment"><code class="java" data-trim>String input=...;
+DateTimeFormatter format=DateTimeFormatter.ofPattern("MMM d yyyy  hh:mm a");
+String output=departure.format(input);</code></pre>
+</section>
+
+<section>
+    <h1>Hands on !</h1>
+    <p><img src="img/computer-geek.jpg" alt="Hands on" style="margin-top: 100px"/></p>
+</section>
+
+<section>
+    <img src="img/age.jpeg" alt="Hands on" style="margin-top: 150px"/>
+</section>
+
+
+<section class="section">
+    <h1>Annotations et Refléxion</h1>
+</section>
+<section>
+    <h1>Annotations répétables</h1>
+                <pre data-fragment-index="0"><code class="java" data-trim>
+@Retention(RetentionPolicy.RUNTIME)
+@Repeatable(Events.class)
+public @interface Event {
+  String name() default "night class";
+  String description() default "nightly event at zenika";
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Events {
+    Event[] value();
+}</code></pre>
+</section>
+<section>
+    <h1>Annotations répétables</h1>
+                <pre data-fragment-index="0"><code class="java" data-trim>@Event(name="what's next")
+@Event(name="technozaure", description = "internal event for zenika consultants") 
+public class Scheduler {
+  public void doSchedule() { 
+   // do some work
+  }
+}</code></pre>
+<pre data-fragment-index="0"><code class="java" data-trim>
+// getting it using Java 7
+Scheduler.class.getAnnotation(Events.class);</code></pre>
+<pre data-fragment-index="0"><code class="java" data-trim>
+// getting it using Java 8 
+Scheduler.class.getDeclaredAnnotationsByType(Event.class);</code></pre>
+</section>
+
+<section>
+    <h1>Utilisation Etendue</h1>
+                <pre data-fragment-index="0"><code class="java" data-trim>/*Checker Framework Annotations*/
+
+//Class instance creation expression 
+SampleObject = new @Interned SampleObject();
+//type cast
+String nonNullString = (@NonNull String) str;
+//implements clause
+class UnmodifiableList&lt;T> implements @Readonly List<@Readonly T> { ... }
+//thrown exception declaration
+void getBestScore() throws @Aborted MatchException { ... }</code></pre>
+</section>
+
+<section>
+    <h1>Les Méthodes</h1>
+                <pre data-fragment-index="0"><code class="java" data-trim>public class MethodPrameterNameSpyExample {
+    public static void main(String... args) {
+	try {
+	    	Class&lt;?> c = Class.forName(args[0]);
+	    	// getting first method
+	    	Method m = c.getDeclaredMethods()[1];
+	        
+	        //getting first parameter 
+	        Parameter firstParameter = m.getParameters()[1];
+		
+	        //getting parameters names Java 8 
+            	String parameterName = firstParameter.getName();
+	    } catch (ClassNotFoundException x) {
+	    x.printStackTrace();
+	}
+    }
+}</code></pre>
+</section>
+<section>
+    <h1>Hands on !</h1>
+    <p><img src="img/computer-geek.jpg" alt="Hands on" style="margin-top: 100px"/></p>
+</section>
+
+<section>
+    <img src="img/evil.jpg" alt="Hands on" style="margin-top: 30px"/>
+</section>
+</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: false,
+        width: 1439,
+        height: 1079,
+
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: 'plugin/markdown/marked.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: 'plugin/markdown/markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } }
+        ]
+    });
+
+</script>
+
+</body>
+</html>
